@@ -11,6 +11,7 @@ async function commands(client, message, params, command, desc, channelEmoji, pr
 			await functions.keep(params, message, client, desc, channelEmoji);
 			break;
 		case 'add':
+		case 'a':
 			await functions.roll(params, message, client, desc, channelEmoji, 'add');
 			break;
 		case 'reroll':
