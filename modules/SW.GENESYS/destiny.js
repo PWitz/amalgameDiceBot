@@ -63,7 +63,44 @@ const destiny = async (client, message, params, channelEmoji) => {
                 }
             }
             break;
-
+        case 'add':
+            if (params.length > 1) {
+                if (params[1].match(/\d+/g)) {
+                    for(let i = 0; i < params.length; i++) {
+                        let color = params[i].replace(/\d/g, '');
+                        let amount = params[i].replace(/\D/g, '');
+                        switch(color) {
+                            case 'l':
+                            case 'p':
+                                destinyBalance.light += amount;
+                                break;
+                            case 'd':
+                            case 'g':
+                                destinyBalance.dark += amount;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                } else {
+                    for(let i = 0; i < params[1].length; i++) {
+                        let color = params[1][i];
+                        switch(color) {
+                            case 'l':
+                            case 'p':
+                                destinyBalance.light = destinyBalance.light + 1;
+                                break;
+                            case 'd':
+                            case 'g':
+                                destinyBalance.dark = destinyBalance.dark + 1;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            break;
         //Reset the Destiny pool
         case 'reset':
             destinyBalance = initDestinyBalance();
