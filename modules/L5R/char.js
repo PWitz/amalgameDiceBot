@@ -20,7 +20,7 @@ const char = async (client, message, params, channelEmoji) => {
                 return;
             }
         } else {
-            main.sendMessage(message, `${characterName} has not been set up.  Please use !char setup characterName [air] [earth] [fire] [water] [void] to complete setup.`);
+            main.sendMessage(message, `${characterName} has not been set up.  Please use !char setup characterName [AIR] [EARTH] [FIRE] [WATER] [VOID] to complete setup.`);
             return;
         }
     }
@@ -46,33 +46,31 @@ const char = async (client, message, params, channelEmoji) => {
                 glory:40,
                 status:30,
                 rings: {
-                    air: 1,
-                    earth: 1,
-                    fire: 1,
-                    water: 1,
-                    void: 1
+                    AIR: 1,
+                    EARTH: 1,
+                    FIRE: 1,
+                    WATER: 1,
+                    VOID: 1
                 },
-                koku: 0,
-                bu: 0,
-                zeni: 0,
+                money: 0,
                 xp:0,
                 curriculum_xp: 0,
                 school_rank: 1,
                 crit: [],
                 obligation: {},
                 duty: {}            };
-            if (params[2]) character.rings.air = +params[2].replace(/\D/g, '');
-            if (params[3]) character.rings.earth = +params[3].replace(/\D/g, '');
-            if (params[4]) character.rings.fire = +params[4].replace(/\D/g, '');
-            if (params[5]) character.rings.water = +params[5].replace(/\D/g, '');
-            if (params[6]) character.rings.void = +params[6].replace(/\D/g, '');
+            if (params[2]) character.rings.AIR = +params[2].replace(/\D/g, '');
+            if (params[3]) character.rings.EARTH = +params[3].replace(/\D/g, '');
+            if (params[4]) character.rings.FIRE = +params[4].replace(/\D/g, '');
+            if (params[5]) character.rings.WATER = +params[5].replace(/\D/g, '');
+            if (params[6]) character.rings.VOID = +params[6].replace(/\D/g, '');
 
-            character.endurance = (character.rings.earth + character.rings.fire)*2;
-            character.composure = (character.rings.earth + character.rings.water)*2;
-            character.focus = character.rings.fire + character.rings.air;
-            character.vigilance = Math.ceil((character.rings.water + character.rings.air)/2);
-            character.maxVoidPoints = character.rings.void;
-            character.currentVoidPoints = Math.ceil(character.rings.void/2);
+            character.endurance = (character.rings.EARTH + character.rings.FIRE)*2;
+            character.composure = (character.rings.EARTH + character.rings.WATER)*2;
+            character.focus = character.rings.FIRE + character.rings.AIR;
+            character.vigilance = Math.ceil((character.rings.WATER + character.rings.AIR)/2);
+            character.maxVoidPoints = character.rings.VOID;
+            character.currentVoidPoints = Math.ceil(character.rings.VOID/2);
 
             text += buildCharacterStatus(characterName, character);
             break;
@@ -93,44 +91,47 @@ const char = async (client, message, params, channelEmoji) => {
                 if (modifier>0) text += `${characterName} has gained ${modifier} ${type}, for a total of ${character[type]} ${type}.`;
                 if (modifier<0) text += `${characterName} has lost ${modifier} ${type}, for a total of ${character[type]} ${type}.`
             }
-            
+            break;
         
         case 'ring':
         case 'r':
+
             if (params[3]) ring = params[3].toUpperCase();
             if (!ring) {
                 text += `No ring was entered.`;
                 break;
             }
+
             if (modifier){
-                character.rings[ring] += modifier;
+                character.rings[ring] = +character.rings[ring] +modifier;
             }
             if (character.rings[ring] > 5) text += `Careful ! ${characterName}'s affinity with ${ring} has exceeded human limits.`
             if (character.rings[ring] < 1) character.rings[ring] = 1;
             text += `\n${characterName}'s ${ring} Ring is now ${character.rings[ring]}`; 
 
-            if (ring=='air'){
-                character.focus = character.rings.fire + character.rings.air;
-                character.vigilance = Math.ceil((character.rings.water + character.rings.air)/2);
+            if (ring=='AIR'){
+                character.focus = character.rings.FIRE + character.rings.AIR;
+                character.vigilance = Math.ceil((character.rings.WATER + character.rings.AIR)/2);
                 text += `\n${characterName} has now ${character.focus} focus and ${character.vigilance} vigilance.`
             }
-            else if (ring=='earth'){
-                character.endurance = (character.rings.earth + character.rings.fire)*2;
-                character.composure = (character.rings.earth + character.rings.water)*2;
+            else if (ring=='EARTH'){
+                character.endurance = (character.rings.EARTH + character.rings.FIRE)*2;
+                character.composure = (character.rings.EARTH + character.rings.WATER)*2;
                 text += `\n${characterName} has now ${character.endurance} endurance and ${character.vigilance} composure.`
             }
-            else if (ring=='fire'){
-                character.focus = character.rings.fire + character.rings.air;
-                character.endurance = (character.rings.earth + character.rings.fire)*2;
+            else if (ring=='FIRE'){
+                character.focus = character.rings.FIRE + character.rings.AIR;
+                character.endurance = (character.rings.EARTH + character.rings.FIRE)*2;
                 text += `\n${characterName} has now ${character.focus} focus and ${character.endurance} endurance.`
             }
-            else if (ring=='water'){
-                character.vigilance = Math.ceil((character.rings.water + character.rings.air)/2);
-                character.composure = (character.rings.earth + character.rings.water)*2;
+            else if (ring=='WATER'){
+                character.vigilance = Math.ceil((character.rings.WATER + character.rings.AIR)/2);
+                character.composure = (character.rings.EARTH + character.rings.WATER)*2;
                 text += `\n${characterName} has now ${character.composure} composure and ${character.vigilance} vigilance.`
             }
-            else if (ring=='void'){
-                character.maxVoidPoints = character.rings.void;
+            else if (ring=='VOID'){
+                character.maxVoidPoints = character.rings.VOID;
+                text+=`\n${characterName} has now ${character.maxVoidPoints} maxVoidPoints.`
             }
         
         break;
@@ -170,8 +171,8 @@ const char = async (client, message, params, channelEmoji) => {
         case 's':
             if (modifier) {
                 character.strife = +character.strife + modifier;
-                if (modifier > 0) text += `${characterName} takes ${modifier} strain`;
-                else if (modifier < 0) text += `${characterName} recovers from ${-modifier} strain.`;
+                if (modifier > 0) text += `${characterName} takes ${modifier} strife`;
+                else if (modifier < 0) text += `${characterName} recovers from ${-modifier} strife.`;
             }
             if (+character.strife < 0) character.strife = 0;
             text += `\nStrife: \`${character.strife} / ${character.composure}\``;
@@ -243,48 +244,34 @@ const char = async (client, message, params, channelEmoji) => {
 
         case 'koku':
         case 'k':
-            if (modifier > 0 || +character.koku >= -modifier) {
-                character.koku = +character.koku + modifier;
-                if (modifier > 0) text += `${characterName} gets ${modifier} kokus`;
-                else if (modifier < 0) text += `${characterName} pays ${-modifier} kokus.`;
-            } else text += `${characterName} does not have ${-modifier} kokus!`;
-            text += `\n${characterName} has ${character.koku} kokus.`;
-            break;
-
+        case 'kokus':
         case 'bu':
         case 'b':
-            if (modifier > 0 || +character.bu +5*character.koku>= -modifier) {
-                character.bu += modifier;
-
-                koku_modifier = Math.trunc(character.bu/5);
-                character.bu = character.bu %5;
-
-                character.koku+=koku_modifier;
-
-                if (modifier > 0) text += `${characterName} gets ${modifier} bus`;
-                else if (modifier < 0) text += `${characterName} pays ${-modifier} bus.`;
-            } else text += `${characterName} does not have ${-modifier} bus!`;
-            text += `\n${characterName} has ${character.koku} kokus, ${character.bu} bus and ${character.zeni} zenis.`;
-            break;
-        
+        case 'bus':
         case 'zeni':
+        case 'zenis':
         case 'z':
-            if (modifier > 0 || +character.zeni +10*character.bu+50*character.koku >= -modifier) {
-                character.zeni+=modifier;
-
-                bu_modifier = Math.trunc(character.zeni / 10);
-                character.zeni = character.zeni % 10;
-                
-                character.bu+=bu_modifier;
-                koku_modifier = Math.trunc(character.bu/5);
-                character.bu = character.bu %5;
-
-                character.koku+=koku_modifier;
-
-                if (modifier > 0) text += `${characterName} gets ${modifier} zenis.`;
-                else if (modifier < 0) text += `${characterName} pays ${-modifier} zenis.`;
-            } else text += `${characterName} does not have ${-modifier} zenis!`;
-            text += `\n${characterName} has ${character.koku} kokus, ${character.bu} bus and ${character.zeni} zenis.`;
+            if(command === 'koku' || command === 'kokus' || command === 'k') {
+                money_modifier = modifier*50;
+                coin = 'kokus';
+            }
+            if(command === 'bu' || command === 'bus' || command === 'b') {
+                money_modifier = modifier*10;
+                coin = 'bus';
+            }
+            if(command === 'zeni' || command === 'zenis' || command === 'z') {
+                money_modifier = modifier;
+                coin = 'zenis';
+            }
+            if (modifier>0 || character.money >= -money_modifier){
+                character.money+=money_modifier;
+                if (modifier>0) text+= `${characterName} gets ${modifier} ${coin}.`
+                if (modifier<0) text+= `${characterName} pays ${modifier} ${coin}.`
+            } else text += `${characterName} does not have ${-modifier} ${coin}!`;
+            zeni = character.money % 10;
+            bu = ((character.money-zeni)/10) % 5;
+            koku = ((character.money-zeni)/10 -bu)/5;
+            text += `\n${characterName} has ${koku} kokus, ${bu} bus and ${zeni} zenis.`;
             break;
 
         case 'xp':
@@ -300,6 +287,8 @@ const char = async (client, message, params, channelEmoji) => {
                     txt+= `${characterName} has removed ${modifier} to their XP, for a total of ${character.xp}`;
                 }
             }
+            break;
+
         case 'curriculum_xp':
         case 'cxp':
         case 'cursus':
@@ -323,6 +312,7 @@ const char = async (client, message, params, channelEmoji) => {
                 if (+character.school_rank + modifier > 6){
                     character.school_rank = 6;
                     text+=`Congratulations ! You have mastered the teachings of your school. \n\`School Rank : ${character.school_rank}\``;
+                    break;
                 }
                 character.school_rank += modifier;
                 if (character.school_rank<1) character.school_rank=1;
@@ -330,7 +320,7 @@ const char = async (client, message, params, channelEmoji) => {
             }
             break;
 
-        case 'status':
+        case 'show':
             text += buildCharacterStatus(characterName, character);
             break;
 
@@ -376,22 +366,25 @@ const char = async (client, message, params, channelEmoji) => {
 
 const buildCharacterStatus = (name, character) => {
     let text = `__**${name}**__`;
-    text+=`\n \`Air:${character.rings.air}\` \`Earth:${character.rings.earth}\` \`Fire:${character.rings.fire}\` 
-        \`Water:${character/rings.water}\` \`Void:${character.rings.void}\` `;
+    text+=`\n \`AIR:${character.rings.AIR}\` \`EARTH:${character.rings.EARTH}\` \`FIRE:${character.rings.FIRE}\` 
+        \`WATER:${character.rings.WATER}\` \`VOID:${character.rings.VOID}\` `;
 
     if (character.endurance > 0) text += `\nFatigue: \`${character.fatigue} / ${character.endurance}\``;
     if (character.composure > 0) text += `\nStrife: \`${character.strife} / ${character.composure}\``;
-    text+=`\nVoid Points: \`${character.currentVoidPoints} / ${character.maxVoidPoints}`
+    text+=`\nVoid Points: \`${character.currentVoidPoints} / ${character.maxVoidPoints}\``;
     text+= `\nVigilance: \`${character.vigilance}\``;
     text+= `\nFocus: \`${character.focus}\``;
     text+= `\nHonor: \`${character.honor}\``;
     text+= `\nGlory: \`${character.glory}\``;
     text+= `\nStatus: \`${character.status}\``;
 
-    if (character.koku > 0 || character.bu > 0 || character.zeni > 0) text += `\nMoney: \`Koku: ${character.koku}\` 
-        \`Bu: ${character.bu}\` \`Zeni: ${character.zeni}\``;
-
-    text += `\n\`School Rank: ${character.school_rank}\` `;
+    if (character.money > 0){
+        zeni = character.money % 10;
+        bu = ((character.money-zeni)/10) % 5;
+        koku = ((character.money-zeni)/10 -bu)/5;
+        text += `\nMoney: \`Koku: ${koku}\` \`Bu: ${bu}\` \`Zeni: ${zeni}\``;
+    } 
+    text += `\nSchool Rank: \`${character.school_rank}\``;
     if(character.xp > 0) text+= `\`XP: ${character.xp}\` `;
     if(character.curriculum_xp > 0) text += `\`Curriculum_XP: ${character.curriculum_xp}\``;
     if (character.crit.length > 0) text += `\nCrits: \`${character.crit}\``;
