@@ -48,7 +48,7 @@ async function roll(params, message, client, desc, channelEmoji, add) {
 
 }
 
-async function keep(params, message, client, desc, channelEmoji, reroll) {
+async function keep(params, message, client, desc, channelEmoji, action) {
 	new Promise(async resolve => {
 			let object = {black: [], white: [], success: [], opportunity: [], strife: [], explosiveSuccess: []};
 			let diceResult = initDiceResult(), keeperResults = initDiceResult(), messageGif, textGif = '';
@@ -82,7 +82,7 @@ async function keep(params, message, client, desc, channelEmoji, reroll) {
 				}
 			});
 
-			if (reroll) {
+			if (action==="reroll") {
 				keeperResults.roll = {...roll};
 				await asyncForEach(Object.keys(roll).sort((a, b) => dice.indexOf(a) - dice.indexOf(b)), async color => {
 					await asyncForEach(roll[color], async (face, index) => {
@@ -101,7 +101,41 @@ async function keep(params, message, client, desc, channelEmoji, reroll) {
 
 				await sleep(1500);
 
-			} else {
+			} 
+			else if(action==="explode"){
+				console.log(object.white, roll.white);
+				if (object.white.some(target=> !roll.white[target].includes('e')) ||
+					object.black.some(target=> !roll.black[target].includes('e'))){
+					message.channel.send(`Some of the chosen dice are not explosive successes.`);
+					resolve();
+					return;
+				}
+
+
+
+				// if (object.white.some(target => ) && 
+				// 		object.black.some(target => !roll.white[target].includes('e'))){
+				// 		}
+				await asyncForEach(Object.keys(roll).sort((a, b) => dice.indexOf(a) - dice.indexOf(b)), async color => {
+					await asyncForEach(roll[color], async (face, index) => {
+						keeperResults.roll[color].push(roll[color][index]);
+						if (object[color].includes(index)) {
+							keeperResults.roll[color].push(diceFaces[color][rollDice(diceFaces[color].length) - 1]);
+							textGif += emoji(`${color}${face}`, channelEmoji);
+							if (dice.slice(0, -4).includes(color)) textGif += emoji(`${color}gif`, channelEmoji);
+							else textGif += emoji(color, channelEmoji);
+						}
+						else {
+							if (color === 'white' || color === 'black') textGif += emoji(`${color}${face}`, channelEmoji);
+							else textGif += emoji(color, channelEmoji);
+						}
+					});
+				});
+				messageGif = await message.channel.send(textGif).catch(error => console.error(error));
+
+				await sleep(1500);
+			
+			}else {
 				await asyncForEach(Object.keys(roll).sort((a, b) => dice.indexOf(a) - dice.indexOf(b)), async color => {
 					await asyncForEach(roll[color], async (face, index) => {
 						if (object[color].includes(index)) {
@@ -128,7 +162,7 @@ function initDiceResult() {
 			success: [],
 			opportunity: [],
 			strife: [],
-			explosiveSuccess: []
+			explosiveSuccess: [],
 		},
 		results: {
 			face: '',
@@ -138,7 +172,7 @@ function initDiceResult() {
 			explosiveSuccess: {
 				white: 0,
 				black: 0,
-			}
+			},
 		}
 	};
 }

@@ -18,9 +18,17 @@ async function commands(client, message, params, command, desc, channelEmoji, pr
 		case 'rr':
 			await functions.keep(params, message, client, desc, channelEmoji, 'reroll');
 			break;
+		case 'explode':
+		case 'e':
+			await functions.keep(params, message, client, desc, channelEmoji, 'explode');
+			break;
 		case 'help':
 		case 'h':
 			functions.help(params[0], message, prefix);
+			break;
+		case 'character':
+		case 'char':
+			await functions.char(client, message, params, channelEmoji);
 			break;
 		default:
 			break;
