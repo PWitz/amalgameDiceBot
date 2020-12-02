@@ -27,6 +27,8 @@ const help = (client, message, topic, prefix) => {
                  .addField(`${prefix}story g/gm`, 'Uses GM point.')
                  .addField(`${prefix}story set #p #g`, 'Sets story points.')
                  .addField(`${prefix}story set ppgg`, 'Sets story points.')
+                 .addField(`${prefix}story add #p #g`, 'Sets story points.')
+                 .addField(`${prefix}story add ppgg`, 'Sets story points.')
                  .addField(`${prefix}story reset`, 'Resets the story pool.');
             break;
         case 'character':
@@ -37,6 +39,9 @@ const help = (client, message, topic, prefix) => {
                  .addField(`${prefix}char setup characterName maxWound maxStrain credits`, 'Setup a new character.')
                  .addField(`${prefix}char wound/w characterName +X/-X`, 'Increases/decreases wounds for characterName by x.')
                  .addField(`${prefix}char strain/s characterName +X/-X`, 'Increases/decreases strain for characterName by x.')
+                 .addField(`${prefix}char xp characterName +X/-X`, 'Increases/decreases xp for characterName by x.')
+                 .addField(`${prefix}char morality/m characterName +X/-X`, 'Increases/decreases morality for characterName by x. The changes brought by the different thresholds are automatic.')
+                 .addField(`${prefix}char orientation/or characterName dark/light`, 'Changes orientation for characterName to dark/light.')
                  .addField(`${prefix}char credits/c characterName +X/-X`, 'Increases/decreases credit balance for characterName by x.')
                  .addField(`${prefix}char crit characterName +X/-X`, 'Adds/removes critical injuries for characterName.')
                  .addField(`${prefix}char obligation/o characterName +X/-X obligationName`, 'Adds/removes obligations for characterName.')
