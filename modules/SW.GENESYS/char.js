@@ -100,87 +100,82 @@ const char = async (client, message, params, channelEmoji) => {
 
                 if (+character.morality < 80 && +character.morality + modifier >= 80) {
                     character.maxStrain += 1;
-                    text += `${characterName} has gained 1 max Strain.`
+                    text += `\n${characterName} has gained 1 max Strain.`;
                 }
 
                 if (+character.morality < 90 && +character.morality + modifier >= 90) {
-                    if(character.morality < 80) {
-                        character.maxStrain += + 1;
-                        text += `${characterName} has gained 1 max Strain.`
-                    }
                     character.maxStrain += 1;
                     character.maxWound += 1;
-                    text += `${characterName} has gained 1 max Strain and 1 max Wound.`
+                    text += `\n${characterName} has gained 1 max Strain and 1 max Wound.`;
                 }
 
                 // Getting away from the light side of the force
                 if (+character.morality >= 80 && +character.morality + modifier < 80) {
                     character.maxStrain -= 1;
-                    text += `${characterName} has lost 1 max Strain.`
+                    text += `\n${characterName} has lost 1 max Strain.`;
                 }
 
                 if (+character.morality >= 90 && +character.morality + modifier < 90) {
-                    if(character.morality + modifier < 80) {
-                        character.maxStrain -= 1;
-                        text += `${characterName} has lost 1 max Strain.`
-                    }
                     character.maxStrain -= 1;
                     character.maxWound -= 1;
-                    text += `${characterName} has lost 1 max Strain and 1 max Wound.`
+                    text += `\n${characterName} has lost 1 max Strain and 1 max Wound.`;
                 }
 
                 // Growing closer to the dark side of the Force
                 if (character.orientation=="light" && +character.morality + modifier <= 30 && +character.morality>30) {
                     character.orientation="dark";
-                    text += `${characterName} has come back to the dark side of the Force.`;
+                    text += `\n${characterName} has come back to the dark side of the Force.`;
                 }
 
                 if (+character.morality > 20 && +character.morality + modifier <= 20) {
                     character.maxStrain -= 1;
                     character.maxWound += 1;
-                    text += `${characterName} has lost 1 max Strain and gained 1 max Wound.`
+                    text += `\n${characterName} has lost 1 max Strain and gained 1 max Wound.`;
                 }
 
                 if (+character.morality > 10 && +character.morality + modifier <= 10) {
-                    if(character.morality > 20) {
-                        character.maxStrain -= 1;
-                        character.maxWound +=1;
-                        text += `${characterName} has gained 1 max Wound and lost 1 max Strain.`
-                    }
                     character.maxStrain -= 1;
                     character.maxWound += 1;
-                    text += `${characterName} has gained 1 max Wound and lost 1 max Strain.`
+                    text += `\n${characterName} has gained 1 max Wound and lost 1 max Strain.`;
                 }
 
                 // Getting away from the dark side of the force
                 if (+character.morality <= 20 && +character.morality + modifier > 20) {
                     character.maxStrain += 1;
                     character.maxWound -= 1;
-                    text += `${characterName} has gained 1 max Strain and lost 1 max Wound.`
+                    text += `\n${characterName} has gained 1 max Strain and lost 1 max Wound.`;
                 }
 
                 if (+character.morality <= 10 && +character.morality + modifier > 10) {
-                    if(character.morality + modifier > 20) {
-                        character.maxStrain += 1;
-                        character.maxWound -=1;
-                        text += `${characterName} has lost 1 max Wound and gained 1 max Strain.`
-                    }
+
                     character.maxStrain += 1;
                     character.maxWound -= 1;
-                    text += `${characterName} has lost 1 max Wound and gained 1 max Strain.`
+                    text += `\n${characterName} has lost 1 max Wound and gained 1 max Strain.`;
                 }
 
                 character.morality = character.morality + modifier;
 
                 if (character.morality>100) character.morality=100;
                 if (character.morality<0) character.morality=0;
-                text += `Morality: \`${character.morality}\``;
+                text += `\nMorality: \`${character.morality}\``;
             }
             break;
 
         case 'orientation':
+        case 'or':
             if (modifier) {
-                if (modifier=="dark" || modifier=="light") character.orientation = modifier;
+                if (modifier=="dark" && character.morality>=70) {
+                    text+=`${characterName}'s morality is over 70, they cannot be on the dark side of the Force.`;
+                    break;
+                }
+                if (modifier=="light" && character.morality<=30) {
+                    text+=`${characterName}'s morality is under 30, they cannot be on the light side of the Force.`;
+                    break;
+                }
+                if (modifier=="dark" || modifier=="light") {
+                    character.orientation = modifier;
+                    text+= `${characterName} has gone over to the ${modifier} side of the Force.`;
+                }
                 else text += `Orientation is either \`light\` or \`dark\`.`;
             }
             break;
