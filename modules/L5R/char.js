@@ -3,6 +3,14 @@ const { readData, writeData } = require('../data');
 const main = require('../../index');
 const { indexOf, upperFirst } = require('lodash');
 
+const school_rank_thresholds = {
+    1:20,
+    2:24,
+    3:32,
+    4:44,
+    5:60
+}
+
 const char = async (client, message, params, channelEmoji) => {
     //setting the channel specific variables
     let characterStatus = await readData(client, message, 'characterStatus');
@@ -294,15 +302,21 @@ const char = async (client, message, params, channelEmoji) => {
         case 'cursus':
             if (modifier){
                 character.curriculum_xp+=modifier;
-                if(modifier>0) text += `${characterName} has added ${modifier} to their curriculum XP, for a total of ${character.curriculum_xp}`;
+                if(modifier>0) text += `${characterName} has added ${modifier} to their curriculum XP, for a total of ${character.curriculum_xp}.`;
                 else {
                     if(character.curriculum_xp<0) {
                         character.curriculum_xp=0;
-                        txt += `${characterName} has removed all of their curriculum XP.`
+                        text += `${characterName} has removed all of their curriculum XP.`
                         break;
                     }
-                    txt+= `${characterName} has removed ${modifier} to their curriculum XP, for a total of ${character.curriculum_xp}`;
+                    text+= `${characterName} has removed ${modifier} to their curriculum XP, for a total of ${character.curriculum_xp}.`;
                 }
+            }
+            var i = 0;
+            while(character.curriculum_xp>=school_rank_thresholds[character.school_rank]){
+                character.curriculum_xp = character.curriculum_xp - school_rank_thresholds[character.school_rank];
+                character.school_rank+=1;
+                text+= `\n${characterName} has gained a school rank.  School Rank: \`${character.school_rank}\`.`;
             }
             break;
         
@@ -384,9 +398,9 @@ const buildCharacterStatus = (name, character) => {
         koku = ((character.money-zeni)/10 -bu)/5;
         text += `\nMoney: \`Koku: ${koku}\` \`Bu: ${bu}\` \`Zeni: ${zeni}\``;
     } 
-    text += `\nSchool Rank: \`${character.school_rank}\``;
-    if(character.xp > 0) text+= `\`XP: ${character.xp}\` `;
-    if(character.curriculum_xp > 0) text += `\`Curriculum_XP: ${character.curriculum_xp}\``;
+    text += `\nSchool Rank: \`${character.school_rank}\` `;
+    if(character.xp > 0) text+= `XP: \`${character.xp}\` `;
+    if(character.curriculum_xp > 0) text += `Curriculum_XP: \`${character.curriculum_xp}\``;
     if (character.crit.length > 0) text += `\nCrits: \`${character.crit}\``;
     ['obligation', 'duty', 'inventory', 'misc'].forEach(type => {
         if (character[type]) {
