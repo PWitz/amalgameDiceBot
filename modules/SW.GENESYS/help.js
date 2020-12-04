@@ -84,13 +84,14 @@ const help = (client, message, topic, prefix) => {
         case 'i':
             embed.setTitle('**Initiative Help**')
                  .addField(`${prefix}init`, 'Shows current initiative order.')
-                 .addField(`${prefix}init roll diceIdentifiers npc/pc`, 'Rolls your initiative dice and adds character to the order')
+                 .addField(`${prefix}init roll diceIdentifiers characterName`, 'Rolls your initiative dice and adds character to the order')
                  .addField(`${prefix}init next`, 'Moves to next initiative slot.')
                  .addField(`${prefix}init previous`, 'Moves to previous initiative slot.')
                  .addField(`${prefix}init set`, 'Manually set initiative order before any turns occur.')
                  .addField(`${prefix}init modify`, 'Manually alter initiative order mid-round.')
                  .addField(`${prefix}init reset`, 'Resets the initiative order.')
-                 .addField(`${prefix}init remove #`, 'Removes slot# from initiative.');
+                 .addField(`${prefix}init remove #`, 'Removes slot# from initiative.')
+                 .addField(`${prefix}init remove characterName`, 'Removes characterName from initiative.');
             break;
         case 'reroll':
         case 'rr':
