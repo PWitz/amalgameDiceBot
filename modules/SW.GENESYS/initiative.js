@@ -20,8 +20,14 @@ const initiative = async (client, message, params, channelEmoji) => {
                 return;
             }
 
-            // let type = params.pop();
             let characterName = params.pop();
+
+            if (initiativeOrder.slots.some(e => e.character==characterName) || initiativeOrder.newslots.some(e => e.character==characterName)){
+                main.sendMessage(message, `Character ${characterName} is already in initiative order.`);
+                return;
+            }
+
+            // let type = params.pop();
             let diceResult = await functions.roll(client, message, params, channelEmoji, 'Initiative roll');
             diceResult = diceResult.results;
             let rollResult = {
@@ -46,7 +52,10 @@ const initiative = async (client, message, params, channelEmoji) => {
                 main.sendMessage(message, 'No Initiative Order defined.  ie \'!init set char1 char2 ...\'');
                 break;
             }
-
+            if ((new Set(params)).size!==params.length) {
+                main.sendMessage(message, 'Duplicates characters were given.');
+                break;
+            }
             params.forEach(char => initiativeOrder.slots.push({ character: char}))
             break;
             
