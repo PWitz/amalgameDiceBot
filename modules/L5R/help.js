@@ -53,7 +53,7 @@ const help = (topic, message, prefix) => {
 					.addField(`${prefix}char strife/s characterName +X/-X`, 'Increases/decreases strife for characterName by x.')
 					.addField(`${prefix}char xp characterName +X/-X`, 'Increases/decreases xp for characterName by x.')
 					.addField(`${prefix}char curriculum_xp/cxp/cursus characterName +X/-X`, 'Increases/decreases curriculum_xp for characterName by x.')
-					.addField(`${prefix}char school_rank characterName +X/-X`, 'Increases/decreases school_rank for characterName by x.')
+					.addField(`${prefix}char school_rank/sr characterName +X/-X`, 'Increases/decreases school_rank for characterName by x.')
 					.addField(`${prefix}char kokus/koku/k characterName +X/-X`, 'Increases/decreases money for characterName by x kokus.')
 					.addField(`${prefix}char bus/bu/b characterName +X/-X`, 'Increases/decreases money for characterName by x bus.')
 					.addField(`${prefix}char zenis/zeni/z characterName +X/-X`, 'Increases/decreases money for characterName by x zenis.')
