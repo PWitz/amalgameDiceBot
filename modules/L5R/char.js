@@ -289,10 +289,10 @@ const char = async (client, message, params, channelEmoji) => {
                 else {
                     if(character.xp<0) {
                         character.xp=0;
-                        txt += `${characterName} has removed all of their XP.`
+                        text += `${characterName} has removed all of their XP.`
                         break;
                     }
-                    txt+= `${characterName} has removed ${modifier} to their XP, for a total of ${character.xp}`;
+                    text+= `${characterName} has removed ${modifier} to their XP, for a total of ${character.xp}`;
                 }
             }
             break;
