@@ -155,8 +155,9 @@ const char = async (client, message, params, channelEmoji) => {
                 character.currentVoidPoints+=modifier;
                 if (character.currentVoidPoints<0) {
                     character.currentVoidPoints =0;
-                    text+=`\n${characterName} has now 0 void points.`;
                 }
+                text+=`\n${characterName} has now ${character.currentVoidPoints} void points.`;
+
             }
             break;
 
