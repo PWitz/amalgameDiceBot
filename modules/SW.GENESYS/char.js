@@ -303,7 +303,7 @@ const buildCharacterStatus = (name, character) => {
     if (character.crit.length > 0) text += `\nCrits: \`${character.crit}\``;
     text += `\nOrientation: \`${character.orientation}\``;
     text += `\nMorality: \`${character.morality} \``;
-    if (character.xp > 0) text += `\nX: \`${character.xp}\``;
+    if (character.xp > 0) text += `\nXP: \`${character.xp}\``;
     ['obligation', 'duty', 'morality', 'inventory'].forEach(type => {
         if (character[type]) {
             if (Object.keys(character[type]).length > 0) {
