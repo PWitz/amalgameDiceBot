@@ -367,6 +367,7 @@ const char = async (client, message, params, channelEmoji) => {
             }
 
             if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
+                console.log("debug title add", params, cmd, modifier);
                 if(params[4]) mtxp = params[4];
                 if(!mtxp){
                     text += `No completion threshold for the title curriculum was given`;
