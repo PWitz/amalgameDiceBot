@@ -343,6 +343,8 @@ const char = async (client, message, params, channelEmoji) => {
 
         case 'title':
         case 't':
+            if(!character["active_title"]) character.active_title={name:"",title_xp:0, title_completion:0};
+            if(!character["other_titles"]) character.other_titles=[];
             cmd = "";
             title_name="";
             val="";
@@ -445,6 +447,8 @@ const char = async (client, message, params, channelEmoji) => {
 
         case 'txp':
         case 'title_xp':
+            if(!character["active_title"]) character.active_title={name:"",title_xp:0, title_completion:0};
+            if(!character["other_titles"]) character.other_titles=[];
             if(modifier){
                 character.active_title.title_xp+=modifier;
                 if(character.active_title.title_xp>=character.active_title.title_completion){
