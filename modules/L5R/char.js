@@ -373,7 +373,7 @@ const char = async (client, message, params, channelEmoji) => {
                     break;
                 }
                 character.other_titles.push({name:title_name, completion:mtxp});
-                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${title_completion} XP.`
+                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${mtxp} XP.`
             }
             else if(cmd=="remove"||cmd=="rm"){
                 let index = character.other_titles.findIndex(e => e.name==title_name);
