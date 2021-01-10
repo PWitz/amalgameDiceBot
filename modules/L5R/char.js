@@ -489,7 +489,7 @@ const char = async (client, message, params, channelEmoji) => {
 
 const buildCharacterStatus = (name, character) => {
     let text = `__**${name}**__`;
-    text += `\n${character.active_title.name}`;
+    if(character.active_title) text += `\n${character.active_title.name}`;
     text+=`\n \`AIR:${character.rings.AIR}\` \`EARTH:${character.rings.EARTH}\` \`FIRE:${character.rings.FIRE}\` 
         \`WATER:${character.rings.WATER}\` \`VOID:${character.rings.VOID}\` `;
 
