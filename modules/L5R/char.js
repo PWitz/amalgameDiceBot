@@ -345,7 +345,8 @@ const char = async (client, message, params, channelEmoji) => {
         case 't':
             cmd = "";
             title_name="";
-            mtxp="";
+            val="";
+            xp="";
             if(params[2]) cmd = params[2];
             if(!cmd){
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
@@ -367,13 +368,13 @@ const char = async (client, message, params, channelEmoji) => {
             }
 
             if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
-                if(params[4]) mtxp = params[4];
-                if(!mtxp){
+                if(params[4]) val = params[4];
+                if(!val){
                     text += `No completion threshold for the title curriculum was given`;
                     break;
                 }
-                character.other_titles.push({name:title_name, completion:mtxp});
-                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${mtxp} XP.`
+                character.other_titles.push({name:title_name, completion:val});
+                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${val} XP.`
             }
             else if(cmd=="remove"||cmd=="rm"){
                 let index = character.other_titles.findIndex(e => e.name==title_name);
@@ -393,29 +394,30 @@ const char = async (client, message, params, channelEmoji) => {
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
             }
             else if(cmd=="xp"){
-                if(modifier){
-                    character.active_title.title_xp+=modifier;
+                if(params[4]) val = params[4];
+                if(val){
+                    character.active_title.title_xp+=val;
                     if(character.active_title.title_xp>character.title_completion){
                         character.active_title.title_xp=character.active_title.title_completion;
-                        text += `${characterName} has added ${modifier} to their title XP and completed their title curriculum. \n${characterName} can now change titles.`;
+                        text += `${characterName} has added ${val} to their title XP and completed their title curriculum. \n${characterName} can now change titles.`;
                         break;
                     }
-                    if(modifier>0) text += `${characterName} has added ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                    if(val>0) text += `${characterName} has added ${val} to their title XP, for a total of ${character.active_title.title_xp}.`;
                     else {
                         if(character.active_title.title_xp<0) {
                             character.active_title.title_xp=0;
                             text += `${characterName} has removed all of their title XP.`
                             break;
                         }
-                        text+= `${characterName} has removed ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                        text+= `${characterName} has removed ${val} to their title XP, for a total of ${character.active_title.title_xp}.`;
                     }
                 }
             }
             else if(cmd=="max_xp"||cmd=="max"||cmd=="mxp"){
-                if(modifier){
-                    if(modifier >0){
-                        character.active_title.title_completion = modifier;
-                        text += `The curriculum for title ${character.active_title.name} now requires ${modifier} XP to be completed.`;
+                if(val){
+                    if(val >0){
+                        character.active_title.title_completion = val;
+                        text += `The curriculum for title ${character.active_title.name} now requires ${val} XP to be completed.`;
                     }
                     else text += `Please enter a positive value.`;
                 }
