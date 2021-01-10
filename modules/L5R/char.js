@@ -388,12 +388,12 @@ const char = async (client, message, params, channelEmoji) => {
                 break;
             } 
     
-            if(params[3]) val = Number(params[3]);
-            if(!val) {
-                text += `No value was given`;
-                break;
-            }
             if(cmd=="xp"){
+                if(params[3]) val = Number(params[3]);
+                if(!val) {
+                    text += `No value was given`;
+                    break;
+                }
                 character.active_title.title_xp+=val;
                 if(character.active_title.title_xp>=character.active_title.title_completion){
                     character.active_title.title_xp=character.active_title.title_completion;
@@ -412,6 +412,11 @@ const char = async (client, message, params, channelEmoji) => {
                 break;
             }
             else if(cmd=="max_xp"||cmd=="max"||cmd=="mxp"){
+                if(params[3]) val = Number(params[3]);
+                if(!val) {
+                    text += `No value was given`;
+                    break;
+                }
                 if(val >0){
                     character.active_title.title_completion = val;
                     text += `The curriculum for title ${character.active_title.name} now requires ${val} XP to be completed.`;
@@ -419,13 +424,12 @@ const char = async (client, message, params, channelEmoji) => {
                 else text += `Please enter a positive value.`;
                 break;
             }
-
-            if(params[4]) mtxp = Number(params[4]);
-            if(!mtxp) {
-                text += `No value was given`;
-                break;
-            }
             if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
+                if(params[4]) mtxp = Number(params[4]);
+                if(!mtxp) {
+                    text += `No value was given`;
+                    break;
+                }
                 character.other_titles.push({name:title_name, completion:mtxp});
                 text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${mtxp} XP.`;
                 break;
