@@ -362,7 +362,7 @@ const char = async (client, message, params, channelEmoji) => {
 
             if(params[3]) title_name=params[3].toUpperCase();
             if(!title_name){
-                text += `No title was given ${cmd}, ${params}, ${modifier}`;
+                text += `No title was given`;
                 break;
             }
 
@@ -372,7 +372,7 @@ const char = async (client, message, params, channelEmoji) => {
                     text += `No completion threshold for the title curriculum was given`;
                     break;
                 }
-                other_titles.push({name:title_name, completion:mtxp});
+                character.other_titles.push({name:title_name, completion:mtxp});
                 text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${title_completion} XP.`
             }
             else if(cmd=="remove"||cmd=="rm"){
