@@ -372,22 +372,22 @@ const char = async (client, message, params, channelEmoji) => {
                     text += `No completion threshold for the title curriculum was given`;
                     break;
                 }
-                titles.push({name:title_name, completion:mtxp});
+                other_titles.push({name:title_name, completion:mtxp});
                 text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${title_completion} XP.`
             }
             else if(cmd=="remove"||cmd=="rm"){
-                let index = character.titles.findIndex(e => e.name==title_name);
+                let index = character.other_titles.findIndex(e => e.name==title_name);
                 if (index > -1) {
-                    character.titles.splice(index, 1);
+                    character.other_titles.splice(index, 1);
                     text += `${characterName} has removed the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
             }
 
             else if(cmd=="activate"||cmd=="active"||cmd=="act"){
-                let index = character.titles.findIndex(e => e.name==title_name);
+                let index = character.other_titles.findIndex(e => e.name==title_name);
                 if (index > -1) {
-                    character.active_title.name = character.titles.name;
-                    character.active_title.title_completion = character.titles.completion;
+                    character.active_title.name = character.other_titles.name;
+                    character.active_title.title_completion = character.other_titles.completion;
                     character.active_title.title_xp=0;
                     text += `${characterName} has activated the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
