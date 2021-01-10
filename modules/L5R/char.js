@@ -350,13 +350,11 @@ const char = async (client, message, params, channelEmoji) => {
             if(!cmd){
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
                 text += `\nTitle Curriculum: ${character.active_title.title_xp}/${character.active_title.title_completion}\n`;
-                if (Object.keys(character.other_titles).length > 0) {
-                    text += `\nINACTIVE TITLES: \``;
-                    Object.keys(character.other_titles).forEach(name => {
-                        text += `${name}: ${character.other_titles[name]}  `;
-                    });
-                    text += '\`';
+                text += `\n INACTIVE TITLES: \``;
+                for(i=0; i<other_titles.length; i++){
+                    if(character.other_titles[i].name==character.active_title.name) text +=`${character.other_titles[i].name} `;
                 }
+                text += '\`';
                 break;
             }
 
@@ -387,7 +385,7 @@ const char = async (client, message, params, channelEmoji) => {
                 let index = character.other_titles.findIndex(e => e.name==title_name);
                 if (index > -1) {
                     character.active_title.name = character.other_titles.name;
-                    character.active_title.title_completion = character.other_titles.completion;
+                    character.active_title.title_completion = character.other_titles.title_completion;
                     character.active_title.title_xp=0;
                     text += `${characterName} has activated the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
