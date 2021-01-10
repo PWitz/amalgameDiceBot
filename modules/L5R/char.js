@@ -373,6 +373,10 @@ const char = async (client, message, params, channelEmoji) => {
                 if (index > -1) {
                     character.other_titles.splice(index, 1);
                     text += `${characterName} has removed the title:${title_name}.\n`;
+                    if(title_name==character.active_title.name) {
+                        character.active_title={name:"",title_xp:0, title_completion:0};
+                        text += `${characterName} has no active title`;
+                    }
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
                 break;
             }
