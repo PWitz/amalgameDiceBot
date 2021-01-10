@@ -409,7 +409,7 @@ const char = async (client, message, params, channelEmoji) => {
                     }
                 }
             }
-            else if(cmd=="max_xp"||cmd=="max"||cmmd=="mxp"){
+            else if(cmd=="max_xp"||cmd=="max"||cmd=="mxp"){
                 if(modifier){
                     if(modifier >0){
                         character.active_title.title_completion = modifier;
