@@ -417,8 +417,9 @@ const char = async (client, message, params, channelEmoji) => {
                         character.active_title.title_completion = modifier;
                         text += `The curriculum for title ${character.active_title.name} now requires ${modifier} XP to be completed.`;
                     }
-                    
+                    else text += `Please enter a positive value.`;
                 }
+                else text += `No value for maximal xp in title curriculum was given`;
             }
             else {
                 text += `No correct command was given. Please use add, remove, max_xp, xp or activate.`;
