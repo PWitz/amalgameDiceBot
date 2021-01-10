@@ -57,6 +57,7 @@ const help = (topic, message, prefix) => {
 					.addField(`${prefix}char title characterName xp +X/-X`, 'Increases/decreases active title XP for characterName by x points.')
 					.addField(`${prefix}char title characterName max_xp/max/mxp X`, 'Changes the amount of XP required to complete title_name to X.')
 					.addField(`${prefix}char title characterName add/set/a/s title_name X`, 'Adds new title to characterName with a curriculum completed with X XP.')
+					.addField(`${prefix}char title characterName remove/rm title_name X`, 'Removes title_name from characterName.')
 					.addField(`${prefix}char title characterName activate/active/act title_name`, 'Activate title title_name that characterName has.')
 					.addField(`${prefix}char title characterName`, 'Shows every title of characterName.')
 					.addField(`${prefix}char school_rank/sr characterName +X/-X`, 'Increases/decreases school_rank for characterName by x.')
