@@ -346,12 +346,12 @@ const char = async (client, message, params, channelEmoji) => {
             cmd = "";
             title_name="";
             val="";
-            xp="";
+            mtxp="";
             if(params[2]) cmd = params[2];
             if(!cmd){
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
                 text += `\nTitle Curriculum: ${character.active_title.title_xp}/${character.active_title.title_completion}\n`;
-                if(character.other_titles.length>0){
+                if(character.other_titles.length>0 || (character.other_titles.length==1 && character.other_titles[0].name==character.active_title.name)){
                     text += `\n INACTIVE TITLES: \``;
                     for(i=0; i<character.other_titles.length; i++){
                         if(character.other_titles[i].name!=character.active_title.name) text +=`${character.other_titles[i].name} `;
@@ -374,6 +374,7 @@ const char = async (client, message, params, channelEmoji) => {
                     character.other_titles.splice(index, 1);
                     text += `${characterName} has removed the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
+                break;
             }
 
             else if(cmd=="activate"||cmd=="active"||cmd=="act"){
@@ -384,17 +385,15 @@ const char = async (client, message, params, channelEmoji) => {
                     character.active_title.title_xp=0;
                     text += `${characterName} has activated the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
+                break;
             } 
-            if(params[4]) val = Number(params[4]);
+    
+            if(params[3]) val = Number(params[3]);
             if(!val) {
                 text += `No value was given`;
                 break;
             }
-            if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
-                character.other_titles.push({name:title_name, completion:val});
-                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${val} XP.`
-            }
-            else if(cmd=="xp"){
+            if(cmd=="xp"){
                 character.active_title.title_xp+=val;
                 if(character.active_title.title_xp>character.title_completion){
                     character.active_title.title_xp=character.active_title.title_completion;
@@ -417,6 +416,18 @@ const char = async (client, message, params, channelEmoji) => {
                     text += `The curriculum for title ${character.active_title.name} now requires ${val} XP to be completed.`;
                 }
                 else text += `Please enter a positive value.`;
+                break;
+            }
+
+            if(params[4]) mtxp = Number(params[4]);
+            if(!mtxp) {
+                text += `No value was given`;
+                break;
+            }
+            if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
+                character.other_titles.push({name:title_name, completion:mtxp});
+                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${mtxp} XP.`;
+                break;
             }
             else {
                 text += `No correct command was given. Please use add, remove, max_xp, xp or activate.`;
