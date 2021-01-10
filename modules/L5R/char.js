@@ -344,6 +344,8 @@ const char = async (client, message, params, channelEmoji) => {
         case 'title':
         case 't':
             cmd = "";
+            title_name="";
+            mtxp="";
             if(params[2]) cmd = params[2].toUpperCase();
             if(!cmd){
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
