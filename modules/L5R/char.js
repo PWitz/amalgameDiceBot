@@ -64,6 +64,12 @@ const char = async (client, message, params, channelEmoji) => {
                 xp:0,
                 curriculum_xp: 0,
                 school_rank: 1,
+                active_title: {
+                    name:"",
+                    title_xp:0,
+                    title_completion:0
+                },
+                other_titles:[],
                 crit: [],
                 obligation: {},
                 duty: {}            };
@@ -97,7 +103,7 @@ const char = async (client, message, params, channelEmoji) => {
                 if(character[type]>100) character[type]=100;
                 if(character[type]<0) character[type]=0;
                 if (modifier>0) text += `${characterName} has gained ${modifier} ${type}, for a total of ${character[type]} ${type}.`;
-                if (modifier<0) text += `${characterName} has lost ${modifier} ${type}, for a total of ${character[type]} ${type}.`
+                if (modifier<0) text += `${characterName} has lost ${-modifier} ${type}, for a total of ${character[type]} ${type}.`
             }
             break;
         
@@ -335,6 +341,105 @@ const char = async (client, message, params, channelEmoji) => {
             }
             break;
 
+        case 'title':
+        case 't':
+            if(params[2]) cmd = params[2].toUpperCase();
+            if(!cmd){
+                text+=`ACTIVE TITLE: ${character.active_title.name}`;
+                text += `\nTitle Curriculum: ${character.active_title.title_xp}/${character.active_title.title_completion}\n`;
+                if (Object.keys(character.other_titles).length > 0) {
+                    text += `\nINACTIVE TITLES: \``;
+                    Object.keys(character.other_titles).forEach(name => {
+                        text += `${name}: ${character.other_titles[name]}  `;
+                    });
+                    text += '\`';
+                }
+                break;
+            }
+
+            if(params[3]) title_name=params[3].toUpperCase();
+            if(!title_name){
+                text += `No title was given`;
+                break;
+            }
+
+            if(cmd=="add"||cmd=="set"||cmd=="a"||cmd=="s"){
+                if(params[4]) mtxp = params[4];
+                if(!mtxp){
+                    text += `No completion threshold for the title curriculum was given`;
+                    break;
+                }
+                titles.push({name:title_name, completion:mtxp});
+                text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${title_completion} XP.`
+            }
+            else if(cmd=="remove"||cmd=="rm"){
+                let index = character.titles.findIndex(e => e.name==title_name);
+                if (index > -1) {
+                    character.titles.splice(index, 1);
+                    text += `${characterName} has removed the title:${title_name}.\n`;
+                } else text += `${characterName} does not have the title:${title_name}.\n`;
+            }
+
+            else if(cmd=="activate"||cmd=="active"||cmd=="act"){
+                let index = character.titles.findIndex(e => e.name==title_name);
+                if (index > -1) {
+                    character.active_title.name = character.titles.name;
+                    character.active_title.title_completion = character.titles.completion;
+                    character.active_title.title_xp=0;
+                    text += `${characterName} has activated the title:${title_name}.\n`;
+                } else text += `${characterName} does not have the title:${title_name}.\n`;
+            }
+            else if(cmd=="xp"){
+                if(modifier){
+                    character.active_title.title_xp+=modifier;
+                    if(character.active_title.title_xp>character.title_completion){
+                        character.active_title.title_xp=character.active_title.title_completion;
+                        text += `${characterName} has added ${modifier} to their title XP and completed their title curriculum. \n${characterName} can now change titles.`;
+                        break;
+                    }
+                    if(modifier>0) text += `${characterName} has added ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                    else {
+                        if(character.active_title.title_xp<0) {
+                            character.active_title.title_xp=0;
+                            text += `${characterName} has removed all of their title XP.`
+                            break;
+                        }
+                        text+= `${characterName} has removed ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                    }
+                }
+            }
+            else if(cmd=="max_xp"||cmd=="max"||cmmd=="mxp"){
+                if(modifier){
+                    if(modifier >0){
+                        character.active_title.title_completion = modifier;
+                        text += `The curriculum for title ${character.active_title.name} now requires ${modifier} XP to be completed.`;
+                    }
+                    
+                }
+            }
+            break;
+
+        case 'txp':
+        case 'title_xp':
+            if(modifier){
+                character.active_title.title_xp+=modifier;
+                if(character.active_title.title_xp>character.title_completion){
+                    character.active_title.title_xp=character.active_title.title_completion;
+                    text += `${characterName} has added ${modifier} to their title XP and completed their title curriculum.`;
+                    break;
+                }
+                if(modifier>0) text += `${characterName} has added ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                else {
+                    if(character.active_title.title_xp<0) {
+                        character.active_title.title_xp=0;
+                        text += `${characterName} has removed all of their title XP.`
+                        break;
+                    }
+                    text+= `${characterName} has removed ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                }
+            }
+            break;
+
         case 'show':
             text += buildCharacterStatus(characterName, character);
             break;
@@ -381,6 +486,7 @@ const char = async (client, message, params, channelEmoji) => {
 
 const buildCharacterStatus = (name, character) => {
     let text = `__**${name}**__`;
+    text += `\n${character.active_title.title_name}`;
     text+=`\n \`AIR:${character.rings.AIR}\` \`EARTH:${character.rings.EARTH}\` \`FIRE:${character.rings.FIRE}\` 
         \`WATER:${character.rings.WATER}\` \`VOID:${character.rings.VOID}\` `;
 
