@@ -351,7 +351,7 @@ const char = async (client, message, params, channelEmoji) => {
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
                 text += `\nTitle Curriculum: ${character.active_title.title_xp}/${character.active_title.title_completion}\n`;
                 text += `\n INACTIVE TITLES: \``;
-                for(i=0; i<other_titles.length; i++){
+                for(i=0; i<character.other_titles.length; i++){
                     if(character.other_titles[i].name==character.active_title.name) text +=`${character.other_titles[i].name} `;
                 }
                 text += '\`';
