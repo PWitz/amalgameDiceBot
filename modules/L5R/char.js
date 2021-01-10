@@ -346,7 +346,7 @@ const char = async (client, message, params, channelEmoji) => {
             cmd = "";
             title_name="";
             mtxp="";
-            if(params[2]) cmd = params[2].toUpperCase();
+            if(params[2]) cmd = params[2];
             if(!cmd){
                 text+=`ACTIVE TITLE: ${character.active_title.name}`;
                 text += `\nTitle Curriculum: ${character.active_title.title_xp}/${character.active_title.title_completion}\n`;
@@ -419,6 +419,9 @@ const char = async (client, message, params, channelEmoji) => {
                     }
                     
                 }
+            }
+            else {
+                text += `No correct command was given. Please use add, remove, max_xp, xp or activate.`;
             }
             break;
 
