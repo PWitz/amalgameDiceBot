@@ -395,7 +395,7 @@ const char = async (client, message, params, channelEmoji) => {
             }
             if(cmd=="xp"){
                 character.active_title.title_xp+=val;
-                if(character.active_title.title_xp>character.title_completion){
+                if(character.active_title.title_xp>=character.active_title.title_completion){
                     character.active_title.title_xp=character.active_title.title_completion;
                     text += `${characterName} has added ${val} to their title XP and completed their title curriculum. \n${characterName} can now change titles.`;
                     break;
@@ -409,6 +409,7 @@ const char = async (client, message, params, channelEmoji) => {
                     }
                     text+= `${characterName} has removed ${val} to their title XP, for a total of ${character.active_title.title_xp}.`;
                 }
+                break;
             }
             else if(cmd=="max_xp"||cmd=="max"||cmd=="mxp"){
                 if(val >0){
@@ -438,7 +439,7 @@ const char = async (client, message, params, channelEmoji) => {
         case 'title_xp':
             if(modifier){
                 character.active_title.title_xp+=modifier;
-                if(character.active_title.title_xp>character.title_completion){
+                if(character.active_title.title_xp>=character.active_title.title_completion){
                     character.active_title.title_xp=character.active_title.title_completion;
                     text += `${characterName} has added ${modifier} to their title XP and completed their title curriculum.`;
                     break;
