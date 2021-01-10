@@ -386,8 +386,8 @@ const char = async (client, message, params, channelEmoji) => {
             else if(cmd=="activate"||cmd=="active"||cmd=="act"){
                 let index = character.other_titles.findIndex(e => e.name==title_name);
                 if (index > -1) {
-                    character.active_title.name = character.other_titles.name;
-                    character.active_title.title_completion = character.other_titles.title_completion;
+                    character.active_title.name = character.other_titles[index].name;
+                    character.active_title.title_completion = character.other_titles[index].title_completion;
                     character.active_title.title_xp=0;
                     text += `${characterName} has activated the title:${title_name}.\n`;
                 } else text += `${characterName} does not have the title:${title_name}.\n`;
