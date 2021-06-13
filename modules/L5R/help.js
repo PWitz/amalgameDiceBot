@@ -38,6 +38,11 @@ const help = (topic, message, prefix) => {
 			embed.setTitle('**Explode Help**')
 				.addField(`${prefix}explode/e 13`, 'if first and third dice have explosive successes, rolls a new die for each.')
 			break;
+		case 'remove':
+		case 'rm':
+			embed.setTitle('**Remove Help**')
+				.addField(`${prefix}remove/rm 13`, 'remove first and third dice from roll.')
+			break;
 		case 'character':
 		case 'char':
 		case 'c':
@@ -90,6 +95,8 @@ const help = (topic, message, prefix) => {
 				.addField(`${prefix}add/a`, `ie ${prefix}add ww - adds specified dice to previous dicepool.`)
 				.addField(`${prefix}reroll/rr`, `ie ${prefix}reroll 12 - rerolls the first and second dice without modifying the rest of the dicepool`)
 				.addField(`${prefix}explode/e`, `ie ${prefix}explode 12 - adds dice if the first and second dice have explosive successes without modifying the rest of the dicepool`)
+				.addField(`${prefix}remove/rm`, `ie ${prefix}remove 12 - removes first and second dice without modifying the rest of the dicepool`)
+				.addField('Dice selection', 'A few commands require to select dice by their index. You can select up to the 15th die by using hexadecimal digits. For instance, if you do `!keep 6789abcdef` you will keep from the 6th die to the 15th die.')
 				.addField('More Information', 'For more information or help join the [FFG NDS Assistant Bot server](https://discord.gg/G8au6FH)')
 				.addField('Role playing games by Fantasy Flight Games', `[Edge of the Empire](https://www.fantasyflightgames.com/en/products/star-wars-edge-of-the-empire), [Force and Destiny](https://www.fantasyflightgames.com/en/products/star-wars-force-and-destiny), [Age of Rebellion](https://www.fantasyflightgames.com/en/products/star-wars-age-ofrebellion),[Genesys](https://www.fantasyflightgames.com/en/products/genesys), [Legends of the Five Rings](https://www.fantasyflightgames.com/en/legend-of-the-five-rings-roleplaying-game)`);
 			break;
