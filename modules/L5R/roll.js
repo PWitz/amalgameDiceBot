@@ -61,7 +61,7 @@ async function keep(params, message, client, desc, channelEmoji, action) {
 				resolve();
 				return;
 			}
-			if (params.length === 1) params = params[0].split('');
+			if (params.length === 1) params = params[0].split('').map(num => parseInt(Number('0x'+num), 10));
 
 			params.forEach(target => {
 				switch (true) {
