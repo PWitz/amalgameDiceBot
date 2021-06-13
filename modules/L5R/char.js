@@ -98,6 +98,9 @@ const char = async (client, message, params, channelEmoji) => {
             if(command=="honor"||command=="h") type="honor";
             if(command=="glory"||command=="g") type="glory";
             if(command=="status"||command=="st") type="status";
+            if(!modifier){
+                text += `No modifier was entered.`;
+            }
             if(modifier){
                 character[type]+=modifier;
                 if(character[type]>100) character[type]=100;
@@ -247,7 +250,7 @@ const char = async (client, message, params, channelEmoji) => {
                         text += `${characterName} has removed all of their ${name} ${type}.`;
                         delete character[type][name];
                     }
-                    text += `${characterName} has removed ${modifier} from their ${name} ${type}, for a total of ${character[type][name]}`;
+                    text += `${characterName} has removed ${-modifier} from their ${name} ${type}, for a total of ${character[type][name]}`;
                 }
             }
             if (Object.keys(character[type]).length === 0) text += `\n${characterName} has no ${type}.`;
@@ -281,7 +284,7 @@ const char = async (client, message, params, channelEmoji) => {
             if (modifier>0 || character.money >= -money_modifier){
                 character.money+=money_modifier;
                 if (modifier>0) text+= `${characterName} gets ${modifier} ${coin}.`
-                if (modifier<0) text+= `${characterName} pays ${modifier} ${coin}.`
+                if (modifier<0) text+= `${characterName} pays ${-modifier} ${coin}.`
             } else text += `${characterName} does not have ${-modifier} ${coin}!`;
             zeni = character.money % 10;
             bu = ((character.money-zeni)/10) % 5;
@@ -299,7 +302,7 @@ const char = async (client, message, params, channelEmoji) => {
                         text += `${characterName} has removed all of their XP.`
                         break;
                     }
-                    text+= `${characterName} has removed ${modifier} to their XP, for a total of ${character.xp}`;
+                    text+= `${characterName} has removed ${-modifier} to their XP, for a total of ${character.xp}`;
                 }
             }
             break;
@@ -316,7 +319,7 @@ const char = async (client, message, params, channelEmoji) => {
                         text += `${characterName} has removed all of their curriculum XP.`
                         break;
                     }
-                    text+= `${characterName} has removed ${modifier} to their curriculum XP, for a total of ${character.curriculum_xp}.`;
+                    text+= `${characterName} has removed ${-modifier} to their curriculum XP, for a total of ${character.curriculum_xp}.`;
                 }
             }
             var i = 0;
@@ -413,7 +416,7 @@ const char = async (client, message, params, channelEmoji) => {
                         text += `${characterName} has removed all of their title XP.`
                         break;
                     }
-                    text+= `${characterName} has removed ${val} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                    text+= `${characterName} has removed ${-val} to their title XP, for a total of ${character.active_title.title_xp}.`;
                 }
                 break;
             }
@@ -463,7 +466,7 @@ const char = async (client, message, params, channelEmoji) => {
                         text += `${characterName} has removed all of their title XP.`
                         break;
                     }
-                    text+= `${characterName} has removed ${modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
+                    text+= `${characterName} has removed ${-modifier} to their title XP, for a total of ${character.active_title.title_xp}.`;
                 }
             }
             break;

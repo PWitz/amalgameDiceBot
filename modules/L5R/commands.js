@@ -22,6 +22,10 @@ async function commands(client, message, params, command, desc, channelEmoji, pr
 		case 'e':
 			await functions.keep(params, message, client, desc, channelEmoji, 'explode');
 			break;
+		case 'remove':
+		case 'rm':
+			await functions.keep(params, message, client, desc, channelEmoji, 'remove');
+			break;
 		case 'help':
 		case 'h':
 			functions.help(params[0], message, prefix);

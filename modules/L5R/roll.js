@@ -50,8 +50,12 @@ async function roll(params, message, client, desc, channelEmoji, add) {
 
 async function keep(params, message, client, desc, channelEmoji, action) {
 	new Promise(async resolve => {
+
+			// holds parameters
 			let object = {black: [], white: [], success: [], opportunity: [], strife: [], explosiveSuccess: []};
 			let diceResult = initDiceResult(), keeperResults = initDiceResult(), messageGif, textGif = '';
+			
+			// holds previous roll
 			let roll = {...diceResult.roll, ...await readData(client, message, 'diceResult', channelEmoji)};
 			if (!diceResult) {
 				resolve();
@@ -111,11 +115,6 @@ async function keep(params, message, client, desc, channelEmoji, action) {
 					return;
 				}
 
-
-
-				// if (object.white.some(target => ) && 
-				// 		object.black.some(target => !roll.white[target].includes('e'))){
-				// 		}
 				await asyncForEach(Object.keys(roll).sort((a, b) => dice.indexOf(a) - dice.indexOf(b)), async color => {
 					await asyncForEach(roll[color], async (face, index) => {
 						keeperResults.roll[color].push(roll[color][index]);
@@ -126,6 +125,21 @@ async function keep(params, message, client, desc, channelEmoji, action) {
 							else textGif += emoji(color, channelEmoji);
 						}
 						else {
+							if (color === 'white' || color === 'black') textGif += emoji(`${color}${face}`, channelEmoji);
+							else textGif += emoji(color, channelEmoji);
+						}
+					});
+				});
+				messageGif = await message.channel.send(textGif).catch(error => console.error(error));
+
+				await sleep(1500);
+			
+			}
+			else if(action==="remove"){
+				await asyncForEach(Object.keys(roll).sort((a, b) => dice.indexOf(a) - dice.indexOf(b)), async color => {
+					await asyncForEach(roll[color], async (face, index) => {
+						if (!object[color].includes(index)) {
+							keeperResults.roll[color].push(roll[color][index]);
 							if (color === 'white' || color === 'black') textGif += emoji(`${color}${face}`, channelEmoji);
 							else textGif += emoji(color, channelEmoji);
 						}
