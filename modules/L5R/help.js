@@ -118,7 +118,7 @@ const help = (topic, message, prefix) => {
         )
         .addField(
           `${prefix}char title characterName`,
-          "Shows every title of characterName.\n For everything else concerning titles, please check !help title."
+          `Shows every title of characterName.\n For everything else concerning titles, please check ${prefix}help title.`
         )
         .addField(
           `${prefix}char school_rank/sr characterName +X/-X`,
@@ -153,7 +153,7 @@ const help = (topic, message, prefix) => {
           "Adds/removes miscellanous things for characterName."
         )
         .addField(
-          `${prefix}char modify characterName +X/-X maxStrain/maxWounds`,
+          `${prefix}char modify characterName +X/-X composure/endurance`,
           "Increases/decreases selected stat for characterName by x."
         )
         .addField(
@@ -164,7 +164,6 @@ const help = (topic, message, prefix) => {
           `${prefix}char remove characterName`,
           "Removes characterName."
         )
-        .addField(`${prefix}char list`, "Displays all characters.")
         .addField(`${prefix}char reset`, "Resets all the characters.");
       break;
     case "title":

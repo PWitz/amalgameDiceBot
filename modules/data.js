@@ -30,12 +30,7 @@ const writeData = (client, message, dataSet, data, merge = false) => {
   dbRef.set({ [dataSet]: data }, { merge }).catch(console.error);
 };
 
-const writeDashboardData = (dataSet, data) => {
-  let dbRef = getDashboardDbRef(dataSet);
-  dbRef.update({ [dataSet]: data }).catch(console.error);
-};
-
-const createDashboardDb = (dataSet, data, message, merge = false) => {
+const writeDashboardData = (dataSet, data, message, merge = false) => {
   let dbRef = getDashboardDbRef(dataSet, message);
   dbRef.set({ [dataSet]: data }, { merge }).catch(console.error);
 };
@@ -65,4 +60,3 @@ const getDashboardDbRef = (dashboardDataSet) =>
 exports.readData = readData;
 exports.writeData = writeData;
 exports.writeDashboardData = writeDashboardData;
-exports.createDashboardDb = createDashboardDb;

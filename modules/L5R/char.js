@@ -1,11 +1,6 @@
 const functions = require("./");
-const {
-  readData,
-  writeData,
-  writeDashboardData,
-  createDashboardDb,
-} = require("../data");
-const { createDashboardCharacter, dashboardMapping } = require("./DashboardDb");
+const { readData, writeData, writeDashboardData } = require("../data");
+const { createDashboardCharacter } = require("./DashboardDb");
 const main = require("../../index");
 const { indexOf, upperFirst } = require("lodash");
 const { v4: uuidv4 } = require("uuid");
@@ -23,14 +18,12 @@ const char = async (client, message, params, channelEmoji) => {
   let characterStatus = await readData(client, message, "characterStatus");
   let characterName,
     character,
-    onlineDataToUpdate,
-    modifier = 0,
-    command = "list";
+    onlineDataToUpdate = {};
+  (modifier = 0), (command = "list");
 
   if (params[0]) command = params[0];
   if (params[1]) characterName = params[1].toUpperCase();
   if (params[2] && +params[2]) modifier = +params[2];
-
   if (characterName && characterStatus[characterName])
     character = { ...characterStatus[characterName] };
   if (!character && command !== "list" && command !== "reset") {
@@ -125,8 +118,7 @@ const char = async (client, message, params, channelEmoji) => {
       }
       if (modifier) {
         character[type] += modifier;
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping[type]] = character[type];
+        if (character.id) onlineDataToUpdate[type] = character[type];
         if (character[type] > 100) character[type] = 100;
         if (character[type] < 0) character[type] = 0;
         if (modifier > 0)
@@ -148,8 +140,7 @@ const char = async (client, message, params, channelEmoji) => {
 
       if (modifier) {
         character.rings[ring] = +character.rings[ring] + modifier;
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping[ring]] = character.rings[ring];
+        if (character.id) onlineDataToUpdate["rings"] = character.rings;
       }
       if (character.rings[ring] > 5)
         text += `Careful ! ${characterName}'s affinity with ${ring} has exceeded human limits.`;
@@ -163,9 +154,8 @@ const char = async (client, message, params, channelEmoji) => {
         );
         text += `\n${characterName} has now ${character.focus} focus and ${character.vigilance} vigilance.`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["focus"]] = character.focus;
-          onlineDataToUpdate[dashboardMapping["vigilance"]] =
-            character.vigilance;
+          onlineDataToUpdate["focus"] = character.focus;
+          onlineDataToUpdate["vigilance"] = character.vigilance;
         }
       } else if (ring == "EARTH") {
         character.endurance =
@@ -174,10 +164,8 @@ const char = async (client, message, params, channelEmoji) => {
           (character.rings.EARTH + character.rings.WATER) * 2;
         text += `\n${characterName} has now ${character.endurance} endurance and ${character.vigilance} composure.`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["endurance"]] =
-            character.endurance;
-          onlineDataToUpdate[dashboardMapping["composure"]] =
-            character.composure;
+          onlineDataToUpdate["endurance"] = character.endurance;
+          onlineDataToUpdate["composure"] = character.composure;
         }
       } else if (ring == "FIRE") {
         character.focus = character.rings.FIRE + character.rings.AIR;
@@ -185,9 +173,8 @@ const char = async (client, message, params, channelEmoji) => {
           (character.rings.EARTH + character.rings.FIRE) * 2;
         text += `\n${characterName} has now ${character.focus} focus and ${character.endurance} endurance.`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["focus"]] = character.focus;
-          onlineDataToUpdate[dashboardMapping["endurance"]] =
-            character.endurance;
+          onlineDataToUpdate["focus"] = character.focus;
+          onlineDataToUpdate["endurance"] = character.endurance;
         }
       } else if (ring == "WATER") {
         character.vigilance = Math.ceil(
@@ -197,17 +184,14 @@ const char = async (client, message, params, channelEmoji) => {
           (character.rings.EARTH + character.rings.WATER) * 2;
         text += `\n${characterName} has now ${character.composure} composure and ${character.vigilance} vigilance.`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["vigilance"]] =
-            character.vigilance;
-          onlineDataToUpdate[dashboardMapping["composure"]] =
-            character.composure;
+          onlineDataToUpdate["vigilance"] = character.vigilance;
+          onlineDataToUpdate["composure"] = character.composure;
         }
       } else if (ring == "VOID") {
         character.maxVoidPoints = character.rings.VOID;
         text += `\n${characterName} has now ${character.maxVoidPoints} maxVoidPoints.`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["maxVoidPoints"]] =
-            character.maxVoidPoints;
+          onlineDataToUpdate["maxVoidPoints"] = character.maxVoidPoints;
         }
       }
 
@@ -231,8 +215,7 @@ const char = async (client, message, params, channelEmoji) => {
         text += `\n${characterName} has now ${character.currentVoidPoints} void points.`;
 
         if (character.id)
-          onlineDataToUpdate[dashboardMapping["currentVoidPoints"]] =
-            character.currentVoidPoints;
+          onlineDataToUpdate["currentVoidPoints"] = character.currentVoidPoints;
       }
       break;
 
@@ -247,8 +230,7 @@ const char = async (client, message, params, channelEmoji) => {
         if (modifier < 0)
           text += `${characterName} recovers from ${-modifier} damages.`;
 
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping["fatigue"]] = character.fatigue;
+        if (character.id) onlineDataToUpdate["fatigue"] = character.fatigue;
       }
       if (+character.fatigue < 0) character.fatigue = 0;
       text += `\nFatigue: \`${character.fatigue} / ${character.endurance}\``;
@@ -263,8 +245,7 @@ const char = async (client, message, params, channelEmoji) => {
         if (modifier > 0) text += `${characterName} takes ${modifier} strife`;
         else if (modifier < 0)
           text += `${characterName} recovers from ${-modifier} strife.`;
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping["strife"]] = character.strife;
+        if (character.id) onlineDataToUpdate["strife"] = character.strife;
       }
       if (+character.strife < 0) character.strife = 0;
       text += `\nStrife: \`${character.strife} / ${character.composure}\``;
@@ -298,8 +279,10 @@ const char = async (client, message, params, channelEmoji) => {
         if (character.id) {
           data = character[type];
           if (type == "misc" || type == "inventory")
-            data = character["misc"].concat(character["inventory"]);
-          onlineDataToUpdate[dashboardMapping[type]] = data;
+            data = character["misc"]
+              ? character["misc"].concat(character["inventory"] | [])
+              : character["inventory"] || [];
+          onlineDataToUpdate[type] = data;
         }
         //subtraction modifier
       } else if (modifier < 0) {
@@ -318,8 +301,10 @@ const char = async (client, message, params, channelEmoji) => {
         if (character.id) {
           data = character[type];
           if (type == "misc" || type == "inventory")
-            data = character["misc"].concat(character["inventory"]);
-          onlineDataToUpdate[dashboardMapping[type]] = data;
+            data = character["misc"]
+              ? character["misc"].concat(character["inventory"] | [])
+              : character["inventory"] || [];
+          onlineDataToUpdate[type] = data;
         }
       }
       if (Object.keys(character[type]).length === 0)
@@ -355,8 +340,7 @@ const char = async (client, message, params, channelEmoji) => {
       }
       if (modifier > 0 || character.money >= -money_modifier) {
         character.money += money_modifier;
-        if (character.id)
-          dashboardMapping[onlineDataToUpdate["money"]] = character.money;
+        if (character.id) onlineDataToUpdate["money"] = character.money;
         if (modifier > 0) text += `${characterName} gets ${modifier} ${coin}.`;
         if (modifier < 0) text += `${characterName} pays ${-modifier} ${coin}.`;
       } else text += `${characterName} does not have ${-modifier} ${coin}!`;
@@ -369,8 +353,7 @@ const char = async (client, message, params, channelEmoji) => {
     case "xp":
       if (modifier) {
         character.xp += modifier;
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping["xp"]] = character.xp;
+        if (character.id) onlineDataToUpdate["xp"] = character.xp;
         if (modifier > 0)
           text += `${characterName} has added ${modifier} to their XP, for a total of ${character.xp}`;
         else {
@@ -404,8 +387,7 @@ const char = async (client, message, params, channelEmoji) => {
           }.`;
         }
         if (character.id)
-          onlineDataToUpdate[dashboardMapping["curriculum_xp"]] =
-            character.curriculum_xp;
+          onlineDataToUpdate["curriculum_xp"] = character.curriculum_xp;
       }
       var i = 0;
       while (
@@ -416,8 +398,7 @@ const char = async (client, message, params, channelEmoji) => {
           school_rank_thresholds[character.school_rank];
         character.school_rank += 1;
         if (character.id)
-          onlineDataToUpdate[dashboardMapping["school_rank"]] =
-            character.school_rank;
+          onlineDataToUpdate["school_rank"] = character.school_rank;
         text += `\n${characterName} has gained a school rank.  School Rank: \`${character.school_rank}\`.`;
       }
       break;
@@ -435,8 +416,7 @@ const char = async (client, message, params, channelEmoji) => {
         text += `Congratulations ! You have reached the ${character.school_rank} rank in your school teachings.`;
 
         if (character.id)
-          onlineDataToUpdate[dashboardMapping["school_rank"]] =
-            character.school_rank;
+          onlineDataToUpdate["school_rank"] = character.school_rank;
       }
       break;
 
@@ -444,14 +424,11 @@ const char = async (client, message, params, channelEmoji) => {
     case "t":
       if (!character["active_title"]) {
         character.active_title = { name: "", title_xp: 0, title_completion: 0 };
-        if (character.id)
-          onlineDataToUpdate[dashboardMapping[active_title]] = "";
+        if (character.id) onlineDataToUpdate["active_title"] = "";
       }
       if (!character["other_titles"]) {
         character.other_titles = [];
-        onlineDataToUpdate[dashboardMapping["titles"]] = [
-          character.active_title,
-        ];
+        onlineDataToUpdate["titles"] = [character.active_title];
       }
       cmd = "";
       title_name = "";
@@ -500,11 +477,10 @@ const char = async (client, message, params, channelEmoji) => {
         } else
           text += `${characterName} does not have the title:${title_name}.\n`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["active_title"]] =
-            character.active_title.name;
-          onlineDataToUpdate[
-            dashboardMapping["titles"]
-          ] = character.other_titles.concat([active_title]);
+          onlineDataToUpdate["active_title"] = character.active_title.name;
+          onlineDataToUpdate["titles"] = character.active_title
+            ? [character.active_title].concat(character.other_titles || [])
+            : character.other_titles || [];
         }
         break;
       } else if (cmd == "activate" || cmd == "active" || cmd == "act") {
@@ -520,11 +496,10 @@ const char = async (client, message, params, channelEmoji) => {
         } else
           text += `${characterName} does not have the title:${title_name}.\n`;
         if (character.id) {
-          onlineDataToUpdate[dashboardMapping["active_title"]] =
-            character.active_title.name;
-          onlineDataToUpdate[
-            dashboardMapping["titles"]
-          ] = character.other_titles.concat([active_title]);
+          onlineDataToUpdate["active_title"] = character.active_title.name;
+          onlineDataToUpdate["titles"] = character.active_title
+            ? [character.active_title].concat(character.other_titles || [])
+            : character.other_titles || [];
         }
         break;
       }
@@ -543,6 +518,10 @@ const char = async (client, message, params, channelEmoji) => {
           character.active_title.title_xp =
             character.active_title.title_completion;
           text += `${characterName} has added ${val} to their title XP and completed their title curriculum. \n${characterName} can now change titles.`;
+          if (character.id)
+            onlineDataToUpdate["titles"] = character.active_title
+              ? [character.active_title].concat(character.other_titles || [])
+              : character.other_titles || [];
           break;
         }
         if (val > 0)
@@ -551,6 +530,10 @@ const char = async (client, message, params, channelEmoji) => {
           if (character.active_title.title_xp < 0) {
             character.active_title.title_xp = 0;
             text += `${characterName} has removed all of their title XP.`;
+            if (character.id)
+              onlineDataToUpdate["titles"] = character.active_title
+                ? [character.active_title].concat(character.other_titles || [])
+                : character.other_titles || [];
             break;
           }
           text += `${characterName} has removed ${-val} to their title XP, for a total of ${
@@ -558,9 +541,9 @@ const char = async (client, message, params, channelEmoji) => {
           }.`;
         }
         if (character.id)
-          onlineDataToUpdate[
-            dashboardMapping["titles"]
-          ] = character.other_titles.concat([active_title]);
+          onlineDataToUpdate["titles"] = character.active_title
+            ? [character.active_title].concat(character.other_titles || [])
+            : character.other_titles || [];
         break;
       } else if (cmd == "max_xp" || cmd == "max" || cmd == "mxp") {
         if (params[3]) val = Number(params[3]);
@@ -573,9 +556,9 @@ const char = async (client, message, params, channelEmoji) => {
           text += `The curriculum for title ${character.active_title.name} now requires ${val} XP to be completed.`;
         } else text += `Please enter a positive value.`;
         if (character.id)
-          onlineDataToUpdate[
-            dashboardMapping["titles"]
-          ] = character.other_titles.concat([active_title]);
+          onlineDataToUpdate["titles"] = character.active_title
+            ? [character.active_title].concat(character.other_titles || [])
+            : character.other_titles || [];
         break;
       }
       if (cmd == "add" || cmd == "set" || cmd == "a" || cmd == "s") {
@@ -587,9 +570,9 @@ const char = async (client, message, params, channelEmoji) => {
         character.other_titles.push({ name: title_name, completion: mtxp });
         text += `\n${characterName} has gained the title ${title_name}. Its curriculum will be complete after ${mtxp} XP.`;
         if (character.id)
-          onlineDataToUpdate[
-            dashboardMapping["titles"]
-          ] = character.other_titles.concat([active_title]);
+          onlineDataToUpdate["titles"] = character.active_title
+            ? [character.active_title].concat(character.other_titles || [])
+            : character.other_titles || [];
         break;
       } else {
         text += `No correct command was given. Please use add, remove, max_xp, xp or activate.`;
@@ -600,15 +583,12 @@ const char = async (client, message, params, channelEmoji) => {
     case "title_xp":
       if (!character["active_title"]) {
         character.active_title = { name: "", title_xp: 0, title_completion: 0 };
-        if (character.link)
-          onlineDataToUpdate[dashboardMapping["active_title"]] = "";
+        if (character.link) onlineDataToUpdate["active_title"] = "";
       }
       if (!character["other_titles"]) {
         character.other_titles = [];
         if (character.id)
-          onlineDataToUpdate[dashboardMapping["titles"]] = [
-            character.active_title,
-          ];
+          onlineDataToUpdate["titles"] = [character.active_title];
       }
       if (modifier) {
         character.active_title.title_xp += modifier;
@@ -620,9 +600,9 @@ const char = async (client, message, params, channelEmoji) => {
             character.active_title.title_completion;
           text += `${characterName} has added ${modifier} to their title XP and completed their title curriculum.`;
           if (character.id)
-            onlineDataToUpdate[
-              dashboardMapping["titles"]
-            ] = character.other_titles.concat([active_title]);
+            onlineDataToUpdate["titles"] = character.active_title
+              ? [character.active_title].concat(character.other_titles || [])
+              : character.other_titles || [];
           break;
         }
         if (modifier > 0)
@@ -632,9 +612,9 @@ const char = async (client, message, params, channelEmoji) => {
             character.active_title.title_xp = 0;
             text += `${characterName} has removed all of their title XP.`;
             if (character.id)
-              onlineDataToUpdate[
-                dashboardMapping["titles"]
-              ] = character.other_titles.concat([active_title]);
+              onlineDataToUpdate["titles"] = character.active_title
+                ? [character.active_title].concat(character.other_titles || [])
+                : character.other_titles || [];
             break;
           }
           text += `${characterName} has removed ${-modifier} to their title XP, for a total of ${
@@ -642,6 +622,10 @@ const char = async (client, message, params, channelEmoji) => {
           }.`;
         }
       }
+      if (character.id)
+        onlineDataToUpdate["titles"] = character.active_title
+          ? [character.active_title].concat(character.other_titles || [])
+          : character.other_titles || [];
       break;
 
     case "show":
@@ -651,15 +635,14 @@ const char = async (client, message, params, channelEmoji) => {
     case "modify":
       let stat;
       if (params[3] === "composure") stat = "composure";
-      else if (params[3] === "endurances") stat = "endurance";
+      else if (params[3] === "endurance") stat = "endurance";
 
       if (!stat || !modifier) {
         text += "Bad Command, !help char for more information";
         break;
       }
       character[stat] = +character[stat] + modifier;
-      if (character.id)
-        onlineDataToUpdate[dashboardMapping[stat]] = character[stat];
+      if (character.id) onlineDataToUpdate[stat] = character[stat];
       if (character[stat] < 0) character[stat] = 0;
       text += `${characterName}'s ${stat} is modified to ${character[stat]}`;
       break;
@@ -727,7 +710,7 @@ const char = async (client, message, params, channelEmoji) => {
           characterName,
           message
         );
-        createDashboardDb(character.id, dashboardCharacter);
+        writeDashboardData(character.id, dashboardCharacter);
         text += `\nA new online character has been created. \nIt is available at url: ${character["link"]} or with id ${character["id"]}`;
       } else {
         text =
@@ -739,8 +722,8 @@ const char = async (client, message, params, channelEmoji) => {
       text += `Command:**${command}** not recognized`;
   }
   if (character) {
-    if ("id" in character && command != "web") {
-      writeDashboardData(`characters.${character.id}`, onlineDataToUpdate);
+    if ("id" in character && command != "web" && command != "show") {
+      writeDashboardData(`${character.id}`, onlineDataToUpdate, message, true);
     }
     characterStatus[characterName] = { ...character };
   }
