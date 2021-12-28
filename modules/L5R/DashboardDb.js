@@ -21,7 +21,6 @@ const dashboardMapping = {
   advances: "advancement.advances",
   fatigue: "stats.health.fatigue",
   endurance: "stats.health.endurance",
-  crit: "stats.health.crit",
   strife: "stats.sanity.strife",
   composure: "stats.sanity.composure",
   focus: "stats.derived_attributes.focus",
@@ -86,7 +85,6 @@ const createDashboardCharacter = (character, message) => {
       health: {
         fatigue: character.fatigue,
         endurance: character.endurance,
-        crit: character.crit,
       },
       sanity: { strife: character.strife, composure: character.composure },
       derived_attributes: {
