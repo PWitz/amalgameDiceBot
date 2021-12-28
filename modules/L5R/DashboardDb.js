@@ -21,7 +21,6 @@ const dashboardMapping = {
   advances: "advancement.advances",
   fatigue: "stats.health.fatigue",
   endurance: "stats.health.endurance",
-  crit: "stats.health.crit",
   strife: "stats.sanity.strife",
   composure: "stats.sanity.composure",
   focus: "stats.derived_attributes.focus",
@@ -50,10 +49,10 @@ const dashboardMapping = {
   channel: "discord.channel",
 };
 
-const createDashboardCharacter = (character, message) => {
+const createDashboardCharacter = (character, name, message) => {
   return {
     rp: {
-      name: character.name,
+      name: name,
       background: {},
       motivations: {
         ninjo: [],
@@ -86,7 +85,6 @@ const createDashboardCharacter = (character, message) => {
       health: {
         fatigue: character.fatigue,
         endurance: character.endurance,
-        crit: character.crit,
       },
       sanity: { strife: character.strife, composure: character.composure },
       derived_attributes: {
@@ -121,7 +119,7 @@ const createDashboardCharacter = (character, message) => {
       money: character.money,
       items: {
         armor: [],
-        personal_effects: character.inventory,
+        personal_effects: character.inventory || [],
         weapons: [],
       },
     },

@@ -35,8 +35,8 @@ const writeDashboardData = (dataSet, data) => {
   dbRef.update({ [dataSet]: data }).catch(console.error);
 };
 
-const createDashboardDb = (dataSet, data, merge = false) => {
-  let dbRef = getDashboardDbRef(dataSet);
+const createDashboardDb = (dataSet, data, message, merge = false) => {
+  let dbRef = getDashboardDbRef(dataSet, message);
   dbRef.set({ [dataSet]: data }, { merge }).catch(console.error);
 };
 
