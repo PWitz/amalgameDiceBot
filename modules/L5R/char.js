@@ -90,7 +90,6 @@ const char = async (client, message, params, channelEmoji) => {
           title_completion: 0,
         },
         other_titles: [],
-        crit: [],
         obligation: {},
         duty: {},
       };
@@ -271,37 +270,6 @@ const char = async (client, message, params, channelEmoji) => {
       text += `\nStrife: \`${character.strife} / ${character.composure}\``;
       if (+character.strife > +character.composure)
         text += `\n${characterName} is compromised.`;
-      break;
-
-    case "crit":
-      if (!character.crit) character.crit = [];
-      if (modifier) {
-        if (modifier > 0) {
-          character.crit.push(modifier);
-          text += `${characterName} has added Crit:${modifier} to their Critical Injuries.\n`;
-        } else if (modifier < 0) {
-          let index = indexOf(character.crit, -modifier);
-          if (index > -1) {
-            character.crit.splice(index, 1);
-            text += `${characterName} has removed Crit:${-modifier} from their Critical Injuries.\n`;
-          } else
-            text += `${characterName} does not have Crit:${-modifier} in their Critical Injuries.\n`;
-        }
-        if (character.link)
-          onlineDataToUpdate[dashboardMapping["crit"]] = character.crit;
-      }
-      if (character.crit.length > 0) {
-        text += `${characterName} has the following Critical Injuries.`;
-        character.crit
-          .sort()
-          .forEach(
-            (crit) =>
-              (text += `\nCrit ${crit}: ${functions.textCrit(
-                crit,
-                channelEmoji
-              )}`)
-          );
-      } else text += `${characterName} has no Critical Injuries.`;
       break;
 
     case "obligation":
@@ -800,7 +768,6 @@ const buildCharacterStatus = (name, character) => {
   if (character.xp > 0) text += `XP: \`${character.xp}\` `;
   if (character.curriculum_xp > 0)
     text += `Curriculum_XP: \`${character.curriculum_xp}\``;
-  if (character.crit.length > 0) text += `\nCrits: \`${character.crit}\``;
   ["obligation", "duty", "inventory", "misc"].forEach((type) => {
     if (character[type]) {
       if (Object.keys(character[type]).length > 0) {
